@@ -60,6 +60,8 @@ function(download_realm_tarball url target libraries)
     endif()
 endfunction()
 
+find_package(Threads)
+
 if(APPLE)
   if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
     set(platform ios)
