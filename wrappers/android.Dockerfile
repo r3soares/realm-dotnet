@@ -24,4 +24,4 @@ ENV PATH=/opt/cmake/bin:$PATH
 ENV ANDROID_NDK=/opt/android-ndk
 
 VOLUME /source
-ENTRYPOINT ["/source/build-android.sh"]
+CMD ["/source/build-android.sh"]
