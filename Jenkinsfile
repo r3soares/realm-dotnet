@@ -102,7 +102,7 @@ stage('Build wrappers') {
   for(platform in WindowsUniversalPlatforms) {
     def localPlatform = platform
     jobs["WindowsUniversal ${localPlatform}"] = {
-      rlmNode('windows') {
+      rlmNode('aws-windows-01') {
         unstash 'dotnet-wrappers-source'
         dir('wrappers') {
           powershell ".\\build.ps1 WindowsStore -Configuration ${configuration} -Platforms ${localPlatform}"
