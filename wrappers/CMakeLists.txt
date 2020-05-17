@@ -26,6 +26,40 @@ if(NOT ANDROID)
   set(REALM_ENABLE_SERVER ON)
 endif()
 
+function(download_realm_tarball url target libraries)
+    get_filename_component(tarball_name "${url}" NAME)
+
+    set(tarball_parent_directory "${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}")
+    set(tarball_path "${tarball_parent_directory}/${tarball_name}")
+    set(temp_tarball_path "/tmp/${tarball_name}")
+
+    if (NOT EXISTS ${tarball_path})
+        if (NOT EXISTS ${temp_tarball_path})
+            message("Downloading ${url}.")
+            file(DOWNLOAD ${url} ${temp_tarball_path}.tmp SHOW_PROGRESS)
+            file(RENAME ${temp_tarball_path}.tmp ${temp_tarball_path})
+        endif()
+        file(COPY ${temp_tarball_path} DESTINATION ${tarball_parent_directory})
+    endif()
+
+    if(APPLE)
+        add_custom_command(
+            COMMENT "Extracting ${tarball_name}"
+            OUTPUT ${libraries}
+            COMMAND ${CMAKE_COMMAND} -E tar xf ${tarball_path}
+            COMMAND ${CMAKE_COMMAND} -E remove_directory ${target}
+            COMMAND ${CMAKE_COMMAND} -E rename core ${target}
+            COMMAND ${CMAKE_COMMAND} -E touch_nocreate ${libraries})
+    elseif(REALM_PLATFORM STREQUAL "Android" OR CMAKE_SYSTEM_NAME MATCHES "^Windows")
+        add_custom_command(
+            COMMENT "Extracting ${tarball_name}"
+            OUTPUT ${libraries}
+            COMMAND "${CMAKE_COMMAND}" -E make_directory "${target}"
+            COMMAND "${CMAKE_COMMAND}" -E chdir "${target}" "${CMAKE_COMMAND}" -E tar xf "${tarball_path}"
+            COMMAND "${CMAKE_COMMAND}" -E touch_nocreate ${libraries})
+    endif()
+endfunction()
+
 if(APPLE)
   if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
     set(platform ios)
