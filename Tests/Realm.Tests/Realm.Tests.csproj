@@ -73,4 +73,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EmbeddedResources\trusted_ca.pem" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Database\GenericWriteTests.cs">
+      <SubType></SubType>
+    </Compile>
+  </ItemGroup>
 </Project>
