@@ -29,11 +29,17 @@ namespace Realms.Server
 
         private static class NativeMethods
         {
+#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable SA1121 // Use built-in type alias
+
             [DllImport(InteropConfig.DLL_NAME, EntryPoint = "realm_server_global_notifier_notification_get_changes", CallingConvention = CallingConvention.Cdecl)]
             public static extern void get_changes(NotifierNotificationHandle handle, IntPtr callback, out NativeException nativeException);
 
             [DllImport(InteropConfig.DLL_NAME, EntryPoint = "realm_server_global_notifier_notification_destroy", CallingConvention = CallingConvention.Cdecl)]
             public static extern void destroy(IntPtr handle);
+
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1121 // Use built-in type alias
         }
 
         public void GetChanges(Action<NativeChangeDetails?> callback)

@@ -26,7 +26,7 @@ using TestExplicitAttribute = NUnit.Framework.ExplicitAttribute;
 namespace Realms.Tests.Database
 {
     [TestFixture, Preserve(AllMembers = true)]
-    internal class SimpleLINQtests : PeopleTestsBase
+    public class SimpleLINQtests : PeopleTestsBase
     {
         protected override void CustomSetUp()
         {
