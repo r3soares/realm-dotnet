@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Realms;
 
@@ -155,6 +156,23 @@ namespace Realms.Tests.Database
             {
                 Assert.That(realm.All("Person"), Is.Empty);
             }
+        }
+
+        [Test]
+        public void MigrationAndShouldCompactDelegate_Work()
+        {
+            var path = TestHelpers.CopyBundledFileToDocuments(FileToMigrate, Path.GetTempFileName());
+            var config = new RealmConfiguration(path)
+            {
+                SchemaVersion = 100,
+                ShouldCompactOnLaunch = (_, __) => true,
+                MigrationCallback = (_, __) =>
+                {
+                    Task.Delay(1500).Wait();
+                },
+            };
+
+            Assert.DoesNotThrow(() => Realm.GetInstance(config));
         }
     }
 }
